@@ -1,4 +1,4 @@
-package shortlink
+package handlers
 
 import (
 	"fmt"
