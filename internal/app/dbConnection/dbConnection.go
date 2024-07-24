@@ -3,7 +3,9 @@ package dbConnection
 import (
 	"database/sql"
 	"fmt"
+	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
+	"net/http"
 )
 
 const (
@@ -43,6 +45,7 @@ func SetupDB() *sql.DB {
 }
 
 func AddUrl(originalUrl, shortUrl string) error {
+	fmt.Println("Start add urls.")
 	var exists bool
 	query := `SELECT EXISTS(SELECT 1 FROM urls WHERE short_url=$1 AND original_url=$2)`
 	err := db.QueryRow(query, originalUrl, shortUrl).Scan(&exists)
@@ -57,5 +60,19 @@ func AddUrl(originalUrl, shortUrl string) error {
 			return err
 		}
 	}
+	return nil
+}
+
+func GetUrl(c echo.Context, shortID string, originalURL *string) error {
+	query := "SELECT original_url FROM urls WHERE short_id = ?"
+	err := db.QueryRow(query, shortID).Scan(&originalURL)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "URL not found"})
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal server error"})
+	}
+
 	return nil
 }
