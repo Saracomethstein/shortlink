@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shortened URL</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Your Shortened URL</h1>
+    <p id="shortenedUrl"></p>
+    <a href="index.html">Shorten another URL</a>
+</div>
+<script>
+    // Получаем параметр из URL
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const shortenedUrl = getQueryParam('shortenedUrl');
+        if (shortenedUrl) {
+            document.getElementById('shortenedUrl').textContent = shortenedUrl;
+            document.getElementById('shortenedUrl').setAttribute('href', shortenedUrl);
+        } else {
+            document.getElementById('shortenedUrl').textContent = 'No URL provided.';
+        }
+    });
+</script>
+</body>
+</html>

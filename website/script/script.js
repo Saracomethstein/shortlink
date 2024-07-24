@@ -9,7 +9,7 @@ document.getElementById('urlForm').addEventListener('submit', async function(eve
     }
 
     try {
-        const response = await fetch('http://your-go-server-endpoint/shorten', {
+        const response = await fetch('http://localhost:8080/shorten', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ document.getElementById('urlForm').addEventListener('submit', async function(eve
         }
 
         const data = await response.json();
-        alert('Shortened URL: ' + data.shortenedUrl);
+        window.location.href = `output.html?shortenedUrl=${encodeURIComponent(data.shortenedUrl)}`;
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         alert('There was an error shortening the URL.');
