@@ -1,52 +1,30 @@
-let selectedFunc = '';
-let selectedHash = '';
+document.getElementById('urlForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-function selectFunc(func) {
-    selectedFunc = func;
-    document.getElementById('encrypt').classList.remove('active');
-    document.getElementById('decrypt').classList.remove('active');
-    document.getElementById(func).classList.add('active');
-}
+    const url = document.getElementById('urlInput').value;
 
-function selectHash(hash) {
-    selectedHash = hash;
-    document.getElementById('sha256').classList.remove('active');
-    document.getElementById('sha384').classList.remove('active');
-    document.getElementById('sha512').classList.remove('active');
-    document.getElementById(hash).classList.add('active');
-}
-
-function startProcess() {
-    const inputText = document.getElementById('input').value;
-    if (!inputText) {
-        alert('Please input your url.');
+    if (!url) {
+        alert('Please enter a URL.');
         return;
     }
 
-    fetch('/api/' + selectedFunc, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            text: inputText,
-            hash: selectedHash
-        })
-    })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('output').value = data.result;
-            addHistory(inputText, data.result);
-        })
-        .catch(error => console.error('Error:', error));
-}
+    try {
+        const response = await fetch('http://your-go-server-endpoint/shorten', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url })
+        });
 
-function addHistory(key, crypto) {
-    const historyBody = document.getElementById('history-body');
-    const row = historyBody.insertRow(0);
-    const cellKey = row.insertCell(0);
-    const cellCrypto = row.insertCell(1);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-    cellKey.textContent = key;
-    cellCrypto.textContent = crypto;
-}
+        const data = await response.json();
+        alert('Shortened URL: ' + data.shortenedUrl);
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        alert('There was an error shortening the URL.');
+    }
+});

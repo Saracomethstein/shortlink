@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"fmt"
+	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
-func HandlerHi(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi!")
+func HandlerHi(c echo.Context) error {
+	return c.String(http.StatusOK, "Hello, World!")
 }

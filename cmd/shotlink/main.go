@@ -1,13 +1,15 @@
 package main
 
 import (
-	"log"
-	"net/http"
-	"shotlink/internal/app/handlers"
+	"github.com/labstack/echo/v4"
+	"shortlink/internal/app/handlers"
 )
 
 func main() {
-	http.Handle("/", http.FileServer(http.Dir("./website/static")))
-	http.HandleFunc("/api", handlers.HandlerHi)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	e := echo.New()
+
+	e.Static("/", "./website/static")
+
+	e.GET("/hi", handlers.HandlerHi)
+	e.Logger.Fatal(e.Start(":8000"))
 }

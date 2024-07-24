@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Encryption App</title>
+    <title>URL Shortener</title>
     <link rel="stylesheet" href="style.css">
-    <script src="../script/script.js" defer></script>
 </head>
 <body>
-
 <div class="container">
-    <div class="text-fields">
-        <div class="input-container">
-            <label for="input"></label>
-            <textarea id="input" rows="1" cols="50"></textarea>
-            <button id="start" class="start-button" onclick="startProcess()">START</button>
-        </div>
-    </div>
+    <h1>URL Shortener</h1>
+    <form id="urlForm">
+        <input type="text" id="urlInput" placeholder="Enter URL here">
+        <button type="submit">Shorten</button>
+    </form>
 </div>
+<script src="../script/script.js"></script>
 </body>
 </html>
