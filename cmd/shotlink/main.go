@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", handlers.HandlerHi)
-
+	http.Handle("/", http.FileServer(http.Dir("./website/static")))
+	http.HandleFunc("/api", handlers.HandlerHi)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
