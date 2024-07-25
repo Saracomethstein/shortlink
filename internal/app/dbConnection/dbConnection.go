@@ -3,9 +3,10 @@ package dbConnection
 import (
 	"database/sql"
 	"fmt"
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
-	"net/http"
 )
 
 const (
@@ -63,7 +64,7 @@ func AddUrl(originalUrl, shortUrl string) error {
 }
 
 func GetUrl(c echo.Context, shortID string, originalURL *string) error {
-	query := "SELECT original_url FROM urls WHERE short_id = ?"
+	query := "SELECT original_url FROM urls WHERE short_url = $1"
 	err := db.QueryRow(query, shortID).Scan(&originalURL)
 
 	if err != nil {
@@ -74,4 +75,36 @@ func GetUrl(c echo.Context, shortID string, originalURL *string) error {
 	}
 
 	return nil
+}
+
+func CheckURLExists(originalURL string) (error, bool) {
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM urls WHERE original_url=$1)`
+	err := db.QueryRow(query, originalURL).Scan(&exists)
+
+	if err != nil {
+		return err, exists
+	}
+
+	fmt.Println(exists)
+
+	return nil, exists
+}
+
+func GetShortURL(originalURL string) (error, string) {
+	var shortURL string
+
+	query := "SELECT short_url FROM urls WHERE original_url = $1"
+	err := db.QueryRow(query, originalURL).Scan(&shortURL)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("error: URL not found!")
+			return err, ""
+		}
+
+		return err, ""
+	}
+
+	return nil, shortURL
 }

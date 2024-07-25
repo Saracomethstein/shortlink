@@ -2,11 +2,12 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/labstack/echo/v4"
-	"github.com/teris-io/shortid"
 	"net/http"
 	"net/url"
 	"shortlink/internal/app/dbConnection"
+
+	"github.com/labstack/echo/v4"
+	"github.com/teris-io/shortid"
 )
 
 type URLRequest struct {
@@ -19,6 +20,7 @@ type URLResponse struct {
 
 func HandlerAddUrl(c echo.Context) error {
 	var req URLRequest
+	var shortID string
 
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
@@ -28,13 +30,29 @@ func HandlerAddUrl(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid URL"})
 	}
 
-	shortID, err := shortid.Generate()
+	err, answer := dbConnection.CheckURLExists(req.URL)
+
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating short ID"})
+		return err
 	}
-	err = dbConnection.AddUrl(req.URL, shortID)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error saving URL"})
+
+	if answer == true {
+		err, shortID = dbConnection.GetShortURL(req.URL)
+
+		if err != nil {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "URL not found"})
+		}
+	} else {
+		shortID, err = shortid.Generate()
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating short ID"})
+		}
+
+		err = dbConnection.AddUrl(req.URL, shortID)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error saving URL"})
+		}
 	}
 	response := URLResponse{ShortenedURL: "http://localhost:8000/" + shortID}
 	return c.JSON(http.StatusOK, response)
