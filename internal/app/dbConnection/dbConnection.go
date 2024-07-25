@@ -45,7 +45,6 @@ func SetupDB() *sql.DB {
 }
 
 func AddUrl(originalUrl, shortUrl string) error {
-	fmt.Println("Start add urls.")
 	var exists bool
 	query := `SELECT EXISTS(SELECT 1 FROM urls WHERE short_url=$1 AND original_url=$2)`
 	err := db.QueryRow(query, originalUrl, shortUrl).Scan(&exists)

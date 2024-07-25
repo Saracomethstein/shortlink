@@ -12,9 +12,6 @@ func main() {
 	defer dbConnection.CloseConnection()
 
 	e := echo.New()
-	//e.Use(middleware.Logger())
-	//e.Use(middleware.Recover())
-
 	e.Static("/", "./website/static")
 	e.POST("/shorten", handlers.HandlerAddUrl)
 	e.GET("/shortID", handlers.HandlerRedirect)

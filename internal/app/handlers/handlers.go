@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/teris-io/shortid"
 	"net/http"
@@ -20,8 +19,6 @@ type URLResponse struct {
 func HandlerAddUrl(c echo.Context) error {
 	var req URLRequest
 
-	fmt.Printf("url - %s\n", req.URL)
-
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
 	}
@@ -34,13 +31,11 @@ func HandlerAddUrl(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating short ID"})
 	}
-
-	fmt.Println("Handler (add).")
 	err = dbConnection.AddUrl(req.URL, shortID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error saving URL"})
 	}
-	response := URLResponse{ShortenedURL: "http://localhost:8080/" + shortID}
+	response := URLResponse{ShortenedURL: "http://localhost:8000/" + shortID}
 	return c.JSON(http.StatusOK, response)
 }
 
