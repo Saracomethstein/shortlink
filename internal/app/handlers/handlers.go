@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/teris-io/shortid"
 	"net/http"
@@ -44,6 +45,8 @@ func HandlerRedirect(c echo.Context) error {
 	var originalURL string
 
 	err := dbConnection.GetUrl(c, shortID, &originalURL)
+
+	fmt.Println(originalURL)
 
 	if err != nil {
 		return err

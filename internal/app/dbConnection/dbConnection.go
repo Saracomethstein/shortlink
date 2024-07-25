@@ -47,14 +47,14 @@ func SetupDB() *sql.DB {
 func AddUrl(originalUrl, shortUrl string) error {
 	var exists bool
 	query := `SELECT EXISTS(SELECT 1 FROM urls WHERE short_url=$1 AND original_url=$2)`
-	err := db.QueryRow(query, originalUrl, shortUrl).Scan(&exists)
+	err := db.QueryRow(query, shortUrl, originalUrl).Scan(&exists)
 	if err != nil {
 		return err
 	}
 
 	if !exists {
 		query = `INSERT INTO urls (short_url, original_url) VALUES ($1, $2)`
-		_, err := db.Exec(query, originalUrl, shortUrl)
+		_, err := db.Exec(query, shortUrl, originalUrl)
 		if err != nil {
 			return err
 		}
