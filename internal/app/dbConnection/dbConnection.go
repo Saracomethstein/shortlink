@@ -63,18 +63,20 @@ func AddUrl(originalUrl, shortUrl string) error {
 	return nil
 }
 
-func GetUrl(c echo.Context, shortID string, originalURL *string) error {
+func GetUrl(c echo.Context, shortID string) (error, string) {
+	var originalURL string
+
 	query := "SELECT original_url FROM urls WHERE short_url = $1"
 	err := db.QueryRow(query, shortID).Scan(&originalURL)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return c.JSON(http.StatusNotFound, map[string]string{"error": "URL not found"})
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "URL not found"}), ""
 		}
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal server error"})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Internal server error"}), ""
 	}
 
-	return nil
+	return nil, originalURL
 }
 
 func CheckURLExists(originalURL string) (error, bool) {
@@ -85,8 +87,6 @@ func CheckURLExists(originalURL string) (error, bool) {
 	if err != nil {
 		return err, exists
 	}
-
-	fmt.Println(exists)
 
 	return nil, exists
 }

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 	"shortlink/internal/app/dbConnection"
@@ -59,16 +58,9 @@ func HandlerAddUrl(c echo.Context) error {
 }
 
 func HandlerRedirect(c echo.Context) error {
-	shortID := c.Param("shortID")
-	var originalURL string
+	shortURL := c.Param("shortURL")
 
-	err := dbConnection.GetUrl(c, shortID, &originalURL)
-
-	fmt.Println(originalURL)
-
-	if err != nil {
-		return err
-	}
+	_, originalURL := dbConnection.GetUrl(c, shortURL)
 
 	return c.Redirect(http.StatusFound, originalURL)
 }
