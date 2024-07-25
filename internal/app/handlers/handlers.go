@@ -53,7 +53,7 @@ func HandlerAddUrl(c echo.Context) error {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error saving URL"})
 		}
 	}
-	response := URLResponse{ShortenedURL: "http://localhost:8000/" + shortID}
+	response := URLResponse{ShortenedURL: "http://localhost:8000/redirect/" + shortID}
 	return c.JSON(http.StatusOK, response)
 }
 

@@ -15,6 +15,6 @@ func main() {
 	e := echo.New()
 	e.Static("/", "./website/static")
 	e.POST("/shorten", handlers.HandlerAddUrl)
-	e.GET("/shortURL", handlers.HandlerRedirect)
+	e.GET("/redirect/:shortURL", handlers.HandlerRedirect)
 	e.Logger.Fatal(e.Start(":8000"))
 }
