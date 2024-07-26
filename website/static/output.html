@@ -9,24 +9,12 @@
 <body>
 <div class="container">
     <h1>Your Shortened URL</h1>
-    <p id="shortenedUrl"></p>
+    <input type="text" id="shortUrl" readonly placeholder="Your short URL">
+    <h1></h1>
+    <button id="copyButton">Copy URL</button>
+    <br><br>
     <a href="index.html">Shorten another URL</a>
 </div>
-<script>
-    function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const shortenedUrl = getQueryParam('shortenedUrl');
-        if (shortenedUrl) {
-            document.getElementById('shortenedUrl').textContent = shortenedUrl;
-            document.getElementById('shortenedUrl').setAttribute('href', shortenedUrl);
-        } else {
-            document.getElementById('shortenedUrl').textContent = 'No URL provided.';
-        }
-    });
-</script>
+<script src="output.js"></script>
 </body>
 </html>
