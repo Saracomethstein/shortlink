@@ -17,7 +17,7 @@ document.getElementById('registrForm').addEventListener('submit', async function
 
         if (response.ok) {
             document.getElementById('message').textContent = 'Registration successful!';
-            // window.location.href = 'login.html';
+            window.location.href = 'http://localhost:8000/';
         } else {
             document.getElementById('message').textContent = 'Registration failed: ' + data.error;
         }

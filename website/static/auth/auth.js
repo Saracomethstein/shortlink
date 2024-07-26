@@ -17,8 +17,7 @@ document.getElementById('authForm').addEventListener('submit', async function(ev
 
         if (response.ok) {
             document.getElementById('message').textContent = 'Login successful!';
-            // Redirect to another page if needed
-            // window.location.href = 'some_page.html';
+            window.location.href = 'http://localhost:8000/shorten';
         } else {
             document.getElementById('message').textContent = 'Login failed: ' + data.error;
         }
