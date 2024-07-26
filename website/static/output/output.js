@@ -1,12 +1,16 @@
-function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    console.log(urlParams)
-    console.log(urlParams.get(param))
-    return urlParams.get(param);
+function getCookie(name) {
+    let cookieArr = document.cookie.split(";");
+    for(let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if(name == cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const shortenedUrl = getQueryParam('shortenedUrl');
+    const shortenedUrl = getCookie('shortenedUrl');
     const shortUrlField = document.getElementById('shortUrl');
 
     if (shortenedUrl) {

@@ -22,7 +22,8 @@ document.getElementById('urlForm').addEventListener('submit', async function(eve
         }
 
         const data = await response.json();
-        window.location.href = `output.html?shortenedUrl=${encodeURIComponent(data.shortenedUrl)}`;
+        document.cookie = `shortenedUrl=${encodeURIComponent(data.shortenedUrl)}; path=/`;
+        window.location.href = 'http://localhost:8000/output';
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         alert('There was an error shortening the URL.');

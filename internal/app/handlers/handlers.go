@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 	"shortlink/internal/app/dbConnection"
@@ -59,8 +58,6 @@ func HandlerAddUrl(c echo.Context) error {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error saving URL"})
 		}
 	}
-
-	fmt.Println(shortID)
 
 	response := URLResponse{ShortenedURL: "http://localhost:8000/redirect/" + shortID}
 	return c.JSON(http.StatusOK, response)
