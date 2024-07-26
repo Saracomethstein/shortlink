@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"shortlink/internal/app/dbConnection"
@@ -15,6 +16,11 @@ type URLRequest struct {
 
 type URLResponse struct {
 	ShortenedURL string `json:"shortenedUrl"`
+}
+
+type User struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
 }
 
 func HandlerAddUrl(c echo.Context) error {
@@ -63,4 +69,43 @@ func HandlerRedirect(c echo.Context) error {
 	_, originalURL := dbConnection.GetUrl(c, shortURL)
 
 	return c.Redirect(http.StatusFound, originalURL)
+}
+
+func HandlerAuth(c echo.Context) error {
+	var user User
+	var answer bool
+	var err error
+
+	if err := c.Bind(&user); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
+	}
+
+	err, answer = dbConnection.CheckUserIdDB(user.Login, user.Password)
+
+	if err != nil {
+		return err
+	}
+
+	if answer == true {
+		return c.JSON(http.StatusOK, map[string]string{"message": "Login successful"})
+	} else {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid login or password"})
+	}
+}
+
+func HandlerRegistration(c echo.Context) error {
+	var user User
+	var err error
+
+	if err := c.Bind(&user); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
+	}
+
+	err = dbConnection.AddNewUserInDB(user.Login, user.Password)
+
+	if err != nil {
+		return err
+	}
+	fmt.Println("ok")
+	return c.JSON(http.StatusOK, map[string]string{"message": "Add user successful"})
 }

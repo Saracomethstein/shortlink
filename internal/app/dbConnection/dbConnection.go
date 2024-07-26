@@ -108,3 +108,33 @@ func GetShortURL(originalURL string) (error, string) {
 
 	return nil, shortURL
 }
+
+func CheckUserIdDB(login, password string) (error, bool) {
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM users WHERE login=$1 AND password=$2)`
+	err := db.QueryRow(query, login, password).Scan(&exists)
+
+	if err != nil {
+		return err, exists
+	}
+
+	return nil, exists
+}
+
+func AddNewUserInDB(login, password string) error {
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM users WHERE login=$1 AND password=$2)`
+	err := db.QueryRow(query, login, password).Scan(&exists)
+	if err != nil {
+		return err
+	}
+
+	if !exists {
+		query = `INSERT INTO users ( login, password) VALUES ($1, $2)`
+		_, err := db.Exec(query, login, password)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
