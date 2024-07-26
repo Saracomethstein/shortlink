@@ -121,6 +121,18 @@ func CheckUserIdDB(login, password string) (error, bool) {
 	return nil, exists
 }
 
+func CheckLoginInDB(login string) (error, bool) {
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM users WHERE login=$1)`
+	err := db.QueryRow(query, login).Scan(&exists)
+
+	if err != nil {
+		return err, exists
+	}
+
+	return nil, exists
+}
+
 func AddNewUserInDB(login, password string) error {
 	var exists bool
 	query := `SELECT EXISTS(SELECT 1 FROM users WHERE login=$1 AND password=$2)`

@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"net/url"
+	"shortlink/internal/app/auth"
 	"shortlink/internal/app/dbConnection"
 
 	"github.com/labstack/echo/v4"
@@ -72,6 +73,7 @@ func HandlerRedirect(c echo.Context) error {
 }
 
 func HandlerAuth(c echo.Context) error {
+	var log, pass string
 	var user User
 	var answer bool
 	var err error
@@ -80,7 +82,9 @@ func HandlerAuth(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
 	}
 
-	err, answer = dbConnection.CheckUserIdDB(user.Login, user.Password)
+	log, pass = auth.EcnryptData(user.Login, user.Password)
+
+	err, answer = dbConnection.CheckUserIdDB(log, pass)
 
 	if err != nil {
 		return err
@@ -94,14 +98,30 @@ func HandlerAuth(c echo.Context) error {
 }
 
 func HandlerRegistration(c echo.Context) error {
+	var log, pass string
 	var user User
 	var err error
+	var answer bool
 
 	if err := c.Bind(&user); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
 	}
 
-	err = dbConnection.AddNewUserInDB(user.Login, user.Password)
+	answer = auth.CheckCorrectPassword(user.Password)
+
+	if answer != true {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Password not correct"})
+	}
+
+	log, pass = auth.EcnryptData(user.Login, user.Password)
+
+	err, answer = dbConnection.CheckLoginInDB(log)
+
+	if answer == true {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Username is taken"})
+	}
+
+	err = dbConnection.AddNewUserInDB(log, pass)
 
 	if err != nil {
 		return err
