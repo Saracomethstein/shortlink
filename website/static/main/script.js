@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const sessionId = getCookie('session_id');
     const authButton = document.querySelector('.auth-button');
+    const profileButton = document.querySelector('.profile-button')
 
     if (sessionId) {
         authButton.textContent = 'Logout';
@@ -8,9 +9,17 @@ document.addEventListener('DOMContentLoaded', function() {
             document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
             window.location.href = '/';
         };
+
+        profileButton.onclick = function () {
+            window.location.href='http://localhost:8000/profile';
+        };
     } else {
         authButton.textContent = 'Login';
         authButton.onclick = function() {
+            window.location.href = 'http://localhost:8000/';
+        };
+
+        profileButton.onclick = function () {
             window.location.href = 'http://localhost:8000/';
         };
     }
