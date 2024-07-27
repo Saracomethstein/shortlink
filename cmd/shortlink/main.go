@@ -17,6 +17,7 @@ func main() {
 	e.Static("/registration", "./website/static/regist")
 	e.Static("/output", "./website/static/output")
 	e.Static("/shorten", "./website/static/main")
+	e.Static("/profile", "./website/static/profile")
 
 	e.POST("/shorten", handlers.HandlerAddUrl)
 	e.POST("/auth", handlers.HandlerAuth)
