@@ -3,6 +3,9 @@ package auth
 import (
 	"crypto/sha256"
 	"fmt"
+	"github.com/labstack/echo/v4"
+	"github.com/teris-io/shortid"
+	"net/http"
 	"regexp"
 )
 
@@ -44,4 +47,22 @@ func CheckCorrectPassword(password string) bool {
 	}
 
 	return true
+}
+
+func CheckAuthorization(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		cookie, err := c.Cookie("session_id")
+		if err != nil || cookie.Value == "" {
+			return c.Redirect(http.StatusTemporaryRedirect, "/")
+		}
+		return next(c)
+	}
+}
+
+func GenerateSessionID() string {
+	sessionID, err := shortid.Generate()
+	if err != nil {
+		return ""
+	}
+	return sessionID
 }

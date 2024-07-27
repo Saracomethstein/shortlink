@@ -4,6 +4,11 @@ document.getElementById('authForm').addEventListener('submit', async function(ev
     const login = document.getElementById('login').value;
     const password = document.getElementById('password').value;
 
+    if (!login || !password) {
+        alert('Please enter both login and password.');
+        return;
+    }
+
     try {
         const response = await fetch('http://localhost:8000/auth', {
             method: 'POST',
@@ -13,16 +18,19 @@ document.getElementById('authForm').addEventListener('submit', async function(ev
             body: JSON.stringify({ login, password })
         });
 
-        const data = await response.json();
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-        if (response.ok) {
-            document.getElementById('message').textContent = 'Login successful!';
+        const data = await response.json();
+        if (data.success) {
+            document.cookie = `session_id=${data.session_id}; path=/`;
             window.location.href = 'http://localhost:8000/shorten';
         } else {
-            document.getElementById('message').textContent = 'Login failed: ' + data.error;
+            alert('Authentication failed.');
         }
     } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('message').textContent = 'An error occurred. Please try again.';
+        console.error('There was a problem with the fetch operation:', error);
+        alert('There was an error with authentication.');
     }
 });

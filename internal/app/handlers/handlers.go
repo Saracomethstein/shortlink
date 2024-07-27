@@ -91,10 +91,15 @@ func HandlerAuth(c echo.Context) error {
 	}
 
 	if answer == true {
-		return c.JSON(http.StatusOK, map[string]string{"message": "Login successful"})
-	} else {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid login or password"})
+		sessionID := auth.GenerateSessionID()
+		cookie := new(http.Cookie)
+		cookie.Name = "session_id"
+		cookie.Value = sessionID
+		cookie.Path = "/"
+		c.SetCookie(cookie)
+		return c.JSON(http.StatusOK, map[string]string{"success": "true", "session_id": sessionID})
 	}
+	return c.JSON(http.StatusUnauthorized, map[string]string{"message": "Authentication failed"})
 }
 
 func HandlerRegistration(c echo.Context) error {
