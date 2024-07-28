@@ -27,55 +27,47 @@ func NewAuthService(userRepo repositories.UserRepository) *AuthService {
 	return &AuthService{userRepo: userRepo}
 }
 
-func (s *AuthService) Authorization(c echo.Context) error {
+func (s *AuthService) Authorization(login, password string) (string, error) {
 	var answer bool
 	var err error
 	var user repositories.User
 
-	if err := c.Bind(&user); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
-	}
+	user.Login = login
+	user.Password = password
 
 	user = EncryptData(user)
 	answer, err = s.userRepo.CheckUserExists(user)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	// TODO: change generate and set session_id
 	if answer == true {
 		sessionID := GenerateSessionID()
-		cookie := new(http.Cookie)
-		cookie.Name = "session_id"
-		cookie.Value = sessionID
-		cookie.Path = "/"
-		c.SetCookie(cookie)
-		return c.JSON(http.StatusOK, map[string]string{"success": "true", "session_id": sessionID})
+		return sessionID, nil
 	}
-	return c.JSON(http.StatusUnauthorized, map[string]string{"message": "Authentication failed"})
+	return "", nil
 }
 
-func (s *AuthService) Registration(c echo.Context) error {
+func (s *AuthService) Registration(login, password string) error {
 	var user repositories.User
 	var err error
 	var answer bool
 
-	if err := c.Bind(&user); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
-	}
+	user.Login = login
+	user.Password = password
 
 	answer = CheckCorrectPassword(user.Password)
 
 	if answer != true {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Password not correct"})
+		return err
 	}
 
 	user = EncryptData(user)
 	answer, err = s.userRepo.CheckUserExistsByLogin(user.Login)
 
 	if answer == true {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Username is taken"})
+		return nil
 	}
 
 	err = s.userRepo.CreateUser(&user)
@@ -84,7 +76,7 @@ func (s *AuthService) Registration(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{"message": "Add user successful"})
+	return nil
 }
 
 func EncryptData(user repositories.User) repositories.User {

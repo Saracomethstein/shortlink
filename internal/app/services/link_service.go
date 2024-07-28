@@ -3,7 +3,6 @@ package services
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/teris-io/shortid"
-	"net/http"
 	"net/url"
 	"shortlink/internal/app/repositories"
 )
@@ -11,14 +10,6 @@ import (
 type ILinkService interface {
 	ShortUrl(c echo.Context) error
 	Redirect(c echo.Context) error
-}
-
-type URLRequest struct {
-	URL string `json:"url"`
-}
-
-type URLResponse struct {
-	ShortenedURL string `json:"shortenedUrl"`
 }
 
 type LinkService struct {
@@ -29,58 +20,46 @@ func NewLinkService(linkRepo repositories.LinkRepository) *LinkService {
 	return &LinkService{linkRepo: linkRepo}
 }
 
-func (s *LinkService) ShortUrl(c echo.Context) error {
-	var req URLRequest
+func (s *LinkService) ShortUrl(originalLink string) (string, error) {
 	var shortLink string
 
-	if err := c.Bind(&req); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
+	if _, err := url.ParseRequestURI(originalLink); err != nil {
+		return "", err
 	}
 
-	if _, err := url.ParseRequestURI(req.URL); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid URL"})
-	}
-
-	answer, err := s.linkRepo.CheckLinkExistByOriginal(req.URL)
+	answer, err := s.linkRepo.CheckLinkExistByOriginal(originalLink)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if answer == true {
-		shortLink, err = s.linkRepo.GetShortLink(req.URL)
+		shortLink, err = s.linkRepo.GetShortLink(originalLink)
 
 		if err != nil {
-			return c.JSON(http.StatusNotFound, map[string]string{"error": "URL not found"})
+			return "", err
 		}
 	} else {
 		shortLink, err = shortid.Generate()
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating short ID"})
+			return "", err
 		}
 
-		err = s.linkRepo.CreateShortLink(req.URL, shortLink)
+		err = s.linkRepo.CreateShortLink(originalLink, shortLink)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error saving URL"})
+			return "", err
 		}
 	}
-
-	response := URLResponse{ShortenedURL: "http://localhost:8000/redirect/" + shortLink}
-	return c.JSON(http.StatusOK, response)
+	return shortLink, nil
 }
 
-func (s *LinkService) Redirect(c echo.Context) error {
-	var link repositories.Link
-	var err error
-
-	link.ShortCode = c.Param("shortURL")
-
-	link.OriginalURL, err = s.linkRepo.GetOriginalLink(link.ShortCode)
+func (s *LinkService) Redirect(shortLink string) (string, error) {
+	originalURL, err := s.linkRepo.GetOriginalLink(shortLink)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return c.Redirect(http.StatusFound, link.OriginalURL)
+	return originalURL, nil
 }
