@@ -4,7 +4,7 @@ import (
 	"database/sql"
 )
 
-type LinkRepository interface {
+type ILinkRepository interface {
 	GetOriginalLink(shortLink string) (*Link, error)
 	GetShortLink(originalLink string) (*Link, error)
 	CreateShortLink(link *Link) error
@@ -17,54 +17,54 @@ type Link struct {
 	OriginalURL string
 }
 
-type linkRepository struct {
+type LinkRepository struct {
 	db *sql.DB
 }
 
-func NewLinkRepository(db *sql.DB) *linkRepository {
-	return &linkRepository{db: db}
+func NewLinkRepository(db *sql.DB) *LinkRepository {
+	return &LinkRepository{db: db}
 }
 
-func (r *linkRepository) GetOriginalLink(shortLink string) (*Link, error) {
+func (r *LinkRepository) GetOriginalLink(shortLink string) (string, error) {
 	link := &Link{}
 	query := "SELECT original_url FROM urls WHERE short_url = $1"
 	err := r.db.QueryRow(query, shortLink).Scan(&link.ID, &link.ShortCode, &link.OriginalURL)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, nil
+			return "", nil
 		}
-		return nil, err
+		return "", err
 	}
-	return link, nil
+	return link.OriginalURL, nil
 }
 
-func (r *linkRepository) GetShortLink(originalLink string) (*Link, error) {
+func (r *LinkRepository) GetShortLink(originalLink string) (string, error) {
 	link := &Link{}
 	query := "SELECT short_url FROM urls WHERE original_url = $1"
 	err := r.db.QueryRow(query, originalLink).Scan(&link.ID, &link.ShortCode, &link.OriginalURL)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, nil
+			return "", nil
 		}
-		return nil, err
+		return "", err
 	}
 
-	return link, nil
+	return link.ShortCode, nil
 }
 
-func (r *linkRepository) CreateShortLink(link *Link) error {
+func (r *LinkRepository) CreateShortLink(shortLink, originalLink string) error {
 	var exists bool
 	query := `SELECT EXISTS(SELECT 1 FROM urls WHERE short_url=$1 AND original_url=$2)`
-	err := r.db.QueryRow(query, link.ShortCode, link.OriginalURL).Scan(&exists)
+	err := r.db.QueryRow(query, shortLink, originalLink).Scan(&exists)
 	if err != nil {
 		return err
 	}
 
 	if !exists {
 		query = `INSERT INTO urls (short_url, original_url) VALUES ($1, $2)`
-		_, err := r.db.Exec(query, link.ShortCode, link.OriginalURL)
+		_, err := r.db.Exec(query, shortLink, originalLink)
 		if err != nil {
 			return err
 		}
@@ -72,7 +72,7 @@ func (r *linkRepository) CreateShortLink(link *Link) error {
 	return nil
 }
 
-func (r *linkRepository) CheckLinkExistByOriginal(originalLink string) (bool, error) {
+func (r *LinkRepository) CheckLinkExistByOriginal(originalLink string) (bool, error) {
 	var exists bool
 	query := `SELECT EXISTS(SELECT 1 FROM urls WHERE original_url=$1)`
 	err := r.db.QueryRow(query, originalLink).Scan(&exists)

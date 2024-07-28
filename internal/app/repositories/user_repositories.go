@@ -2,10 +2,11 @@ package repositories
 
 import "database/sql"
 
-type UserRepository interface {
+type IUserRepository interface {
 	CheckUserExistsByLogin(login string) (bool, error)
+	CheckUserExists(user User) (bool, error)
 	FindUserByLogin(login string) (*User, error)
-	CreateUser(use *User) error
+	CreateUser(user *User) error
 }
 
 type User struct {
@@ -14,15 +15,15 @@ type User struct {
 	Password string
 }
 
-type userRepository struct {
+type UserRepository struct {
 	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB) *userRepository {
-	return &userRepository{db: db}
+func NewUserRepository(db *sql.DB) *UserRepository {
+	return &UserRepository{db: db}
 }
 
-func (r *userRepository) CheckUserExistsByLogin(login string) (bool, error) {
+func (r *UserRepository) CheckUserExistsByLogin(login string) (bool, error) {
 	var exists bool
 	query := `SELECT EXISTS(SELECT 1 FROM users WHERE login=$1)`
 	err := r.db.QueryRow(query, login).Scan(&exists)
@@ -34,7 +35,7 @@ func (r *userRepository) CheckUserExistsByLogin(login string) (bool, error) {
 	return exists, nil
 }
 
-func (r *userRepository) FindUserByLogin(login string) (*User, error) {
+func (r *UserRepository) FindUserByLogin(login string) (*User, error) {
 	user := &User{}
 	query := `SELECT id, login, password FROM users WHERE login = $1`
 	err := r.db.QueryRow(query, login).Scan(&user.ID, &user.Login, &user.Password)
@@ -48,7 +49,7 @@ func (r *userRepository) FindUserByLogin(login string) (*User, error) {
 	return user, nil
 }
 
-func (r *userRepository) CreateUser(user *User) error {
+func (r *UserRepository) CreateUser(user *User) error {
 	var exists bool
 	query := `SELECT EXISTS(SELECT 1 FROM users WHERE login=$1 AND password=$2)`
 	err := r.db.QueryRow(query, user.Login, user.Password).Scan(&exists)
@@ -66,4 +67,16 @@ func (r *userRepository) CreateUser(user *User) error {
 		}
 	}
 	return nil
+}
+
+func (r *UserRepository) CheckUserExists(user User) (bool, error) {
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM users WHERE login=$1 AND password=$2)`
+	err := r.db.QueryRow(query, user.Login, user.Password).Scan(&exists)
+
+	if err != nil {
+		return exists, err
+	}
+
+	return exists, nil
 }
