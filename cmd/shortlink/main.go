@@ -9,23 +9,7 @@ import (
 )
 
 func main() {
-	//dbConnection.GetConnection()
-	//defer dbConnection.CloseConnection()
-	//
-	//e := echo.New()
-	//e.Static("/", "./website/static/auth")
-	//e.Static("/registration", "./website/static/regist")
-	//e.Static("/output", "./website/static/output")
-	//e.Static("/shorten", "./website/static/main")
-	//e.Static("/profile", "./website/static/profile")
-	//
-	//e.POST("/shorten", handlers.HandlerAddUrl)
-	//e.POST("/auth", handlers.HandlerAuth)
-	//e.POST("/registration", handlers.HandlerRegistration)
-	//e.GET("/redirect/:shortURL", handlers.HandlerRedirect)
-
 	db := repositories.SetupDB()
-
 	serviceContainer := services.NewServiceContainer(db)
 
 	e := echo.New()
