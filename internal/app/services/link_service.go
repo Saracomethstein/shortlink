@@ -46,7 +46,7 @@ func (s *LinkService) ShortUrl(originalLink string) (string, error) {
 			return "", err
 		}
 
-		err = s.linkRepo.CreateShortLink(originalLink, shortLink)
+		err = s.linkRepo.CreateShortLink(shortLink, originalLink)
 		if err != nil {
 			return "", err
 		}

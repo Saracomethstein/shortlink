@@ -28,7 +28,7 @@ func NewLinkRepository(db *sql.DB) *LinkRepository {
 func (r *LinkRepository) GetOriginalLink(shortLink string) (string, error) {
 	link := &Link{}
 	query := "SELECT original_url FROM urls WHERE short_url = $1"
-	err := r.db.QueryRow(query, shortLink).Scan(&link.ID, &link.ShortCode, &link.OriginalURL)
+	err := r.db.QueryRow(query, shortLink).Scan(&link.OriginalURL)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -42,7 +42,7 @@ func (r *LinkRepository) GetOriginalLink(shortLink string) (string, error) {
 func (r *LinkRepository) GetShortLink(originalLink string) (string, error) {
 	link := &Link{}
 	query := "SELECT short_url FROM urls WHERE original_url = $1"
-	err := r.db.QueryRow(query, originalLink).Scan(&link.ID, &link.ShortCode, &link.OriginalURL)
+	err := r.db.QueryRow(query, originalLink).Scan(&link.ShortCode)
 
 	if err != nil {
 		if err == sql.ErrNoRows {

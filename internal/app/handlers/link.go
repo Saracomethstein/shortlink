@@ -33,11 +33,12 @@ func (h *LinkHandler) CreateShortLink(c echo.Context) error {
 		return SendErrorResponse(c, http.StatusInternalServerError, "Could not create short link")
 	}
 
-	return SendSuccessResponse(c, http.StatusOK, CreateShortLinkResponse{ShortCode: shortCode})
+	response := CreateShortLinkResponse{ShortCode: "http://localhost:8000/redirect/" + shortCode}
+	return c.JSON(http.StatusOK, response)
 }
 
 func (h *LinkHandler) Redirect(c echo.Context) error {
-	shortCode := c.Param("shortURL")
+	shortCode := c.Param("shortCode")
 
 	originalURL, err := h.LinkService.Redirect(shortCode)
 	if err != nil {
