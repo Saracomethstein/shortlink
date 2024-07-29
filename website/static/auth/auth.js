@@ -31,6 +31,6 @@ document.getElementById('authForm').addEventListener('submit', async function(ev
         }
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
-        alert('There was an error with authentication.');
+        alert('There was an error with authentication (check your login or password).');
     }
 });

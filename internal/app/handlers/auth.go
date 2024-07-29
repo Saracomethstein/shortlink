@@ -36,7 +36,7 @@ func (h *AuthHandler) Authorization(c echo.Context) error {
 	}
 
 	token, err := h.AuthService.Authorization(req.Username, req.Password)
-	if err != nil {
+	if err != nil || token == "" {
 		return SendErrorResponse(c, http.StatusUnauthorized, "Invalid credentials")
 	}
 

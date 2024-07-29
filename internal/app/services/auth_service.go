@@ -46,7 +46,7 @@ func (s *AuthService) Authorization(login, password string) (string, error) {
 		sessionID := GenerateSessionID()
 		return sessionID, nil
 	}
-	return "", nil
+	return "", err
 }
 
 func (s *AuthService) Registration(login, password string) error {
