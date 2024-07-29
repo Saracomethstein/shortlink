@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"shortlink/internal/app/models"
 	"shortlink/internal/app/services"
 )
 
@@ -19,16 +20,8 @@ func NewLinkHandler(linkService *services.LinkService) *LinkHandler {
 	return &LinkHandler{LinkService: linkService}
 }
 
-type CreateShortLinkRequest struct {
-	OriginalURL string `json:"url"`
-}
-
-type CreateShortLinkResponse struct {
-	ShortCode string `json:"shortenedUrl"`
-}
-
 func (h *LinkHandler) CreateShortLink(c echo.Context) error {
-	var req CreateShortLinkRequest
+	var req models.CreateShortLinkRequest
 	if err := c.Bind(&req); err != nil {
 		return SendErrorResponse(c, http.StatusBadRequest, "Invalid request")
 	}
@@ -38,7 +31,7 @@ func (h *LinkHandler) CreateShortLink(c echo.Context) error {
 		return SendErrorResponse(c, http.StatusInternalServerError, "Could not create short link")
 	}
 
-	response := CreateShortLinkResponse{ShortCode: "http://localhost:8000/redirect/" + shortCode}
+	response := models.CreateShortLinkResponse{ShortCode: "http://localhost:8000/redirect/" + shortCode}
 	return c.JSON(http.StatusOK, response)
 }
 

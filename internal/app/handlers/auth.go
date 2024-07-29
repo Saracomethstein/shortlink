@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"shortlink/internal/app/models"
 	"shortlink/internal/app/services"
 )
 
@@ -19,18 +20,8 @@ func NewAuthHandler(authService *services.AuthService) *AuthHandler {
 	return &AuthHandler{AuthService: authService}
 }
 
-type LoginRequest struct {
-	Username string `json:"login"`
-	Password string `json:"password"`
-}
-
-type RegisterRequest struct {
-	Username string `json:"login"`
-	Password string `json:"password"`
-}
-
 func (h *AuthHandler) Authorization(c echo.Context) error {
-	var req LoginRequest
+	var req models.LoginRequest
 	if err := c.Bind(&req); err != nil {
 		return SendErrorResponse(c, http.StatusBadRequest, "Invalid request")
 	}
@@ -44,7 +35,7 @@ func (h *AuthHandler) Authorization(c echo.Context) error {
 }
 
 func (h *AuthHandler) Register(c echo.Context) error {
-	var req RegisterRequest
+	var req models.RegisterRequest
 	if err := c.Bind(&req); err != nil {
 		return SendErrorResponse(c, http.StatusBadRequest, "Invalid request")
 	}
