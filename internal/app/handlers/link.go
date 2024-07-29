@@ -6,6 +6,11 @@ import (
 	"shortlink/internal/app/services"
 )
 
+type ILinkHandler interface {
+	CreateShortLink(c echo.Context) error
+	Redirect(c echo.Context) error
+}
+
 type LinkHandler struct {
 	LinkService *services.LinkService
 }

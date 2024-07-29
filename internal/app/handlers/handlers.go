@@ -2,6 +2,11 @@ package handlers
 
 import "github.com/labstack/echo/v4"
 
+type IErrorResponse interface {
+	SendErrorResponse(c echo.Context, code int, message string) error
+	SendSuccessResponse(c echo.Context, code int, data interface{}) error
+}
+
 type ErrorResponse struct {
 	Message string `json:"message"`
 }

@@ -6,6 +6,11 @@ import (
 	"shortlink/internal/app/services"
 )
 
+type IAuthHandler interface {
+	Authorization(c echo.Context) error
+	Register(c echo.Context) error
+}
+
 type AuthHandler struct {
 	AuthService *services.AuthService
 }

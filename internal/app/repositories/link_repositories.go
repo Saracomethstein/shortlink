@@ -5,6 +5,7 @@ import (
 )
 
 type ILinkRepository interface {
+	NewLinkRepository(db *sql.DB) *LinkRepository
 	GetOriginalLink(shortLink string) (*Link, error)
 	GetShortLink(originalLink string) (*Link, error)
 	CreateShortLink(link *Link) error
