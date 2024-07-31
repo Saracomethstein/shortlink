@@ -22,13 +22,17 @@ func NewLinkHandler(linkService *services.LinkService) *LinkHandler {
 
 func (h *LinkHandler) CreateShortLink(c echo.Context) error {
 	var req models.CreateShortLinkRequest
+	var session_id string
 	var err error
 
 	if req, err = models.BindLink(c); err != nil {
 		return SendErrorResponse(c, http.StatusBadRequest, "Invalid request")
 	}
 
-	shortCode, err := h.LinkService.ShortUrl(req.OriginalURL)
+	if session_id, err = h.LinkService.GetSessionID(c); err != nil {
+		return err
+	}
+	shortCode, err := h.LinkService.ShortUrl(session_id, req.OriginalURL)
 	if err != nil {
 		return SendErrorResponse(c, http.StatusInternalServerError, "Could not create short link")
 	}

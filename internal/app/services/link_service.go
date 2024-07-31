@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/teris-io/shortid"
 	"net/url"
@@ -20,8 +21,9 @@ func NewLinkService(linkRepo repositories.LinkRepository) *LinkService {
 	return &LinkService{linkRepo: linkRepo}
 }
 
-func (s *LinkService) ShortUrl(originalLink string) (string, error) {
+func (s *LinkService) ShortUrl(sesion_id, originalLink string) (string, error) {
 	var shortLink string
+	var login string
 
 	if _, err := url.ParseRequestURI(originalLink); err != nil {
 		return "", err
@@ -35,18 +37,21 @@ func (s *LinkService) ShortUrl(originalLink string) (string, error) {
 
 	if answer == true {
 		shortLink, err = s.linkRepo.GetShortLink(originalLink)
-
 		if err != nil {
 			return "", err
 		}
 	} else {
 		shortLink, err = shortid.Generate()
-
 		if err != nil {
 			return "", err
 		}
 
-		err = s.linkRepo.CreateShortLink(shortLink, originalLink)
+		login, err = s.linkRepo.GetLoginFromLog(sesion_id)
+		if err != nil {
+			return "", err
+		}
+
+		err = s.linkRepo.CreateShortLink(login, shortLink, originalLink)
 		if err != nil {
 			return "", err
 		}
@@ -62,4 +67,14 @@ func (s *LinkService) Redirect(shortLink string) (string, error) {
 	}
 
 	return originalURL, nil
+}
+
+func (s *LinkService) GetSessionID(c echo.Context) (string, error) {
+	cookie, err := c.Cookie("session_id")
+	if err != nil {
+		return "", err
+	}
+	session_id := cookie.Value
+	fmt.Println(session_id)
+	return session_id, nil
 }

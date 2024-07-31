@@ -44,6 +44,9 @@ func (s *AuthService) Authorization(login, password string) (string, error) {
 
 	if answer == true {
 		sessionID := GenerateSessionID()
+		if err := s.userRepo.CreateUserLogging(login, sessionID); err != nil {
+			return "", err
+		}
 		return sessionID, nil
 	}
 	return "", err

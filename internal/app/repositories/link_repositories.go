@@ -55,7 +55,7 @@ func (r *LinkRepository) GetShortLink(originalLink string) (string, error) {
 	return link.ShortCode, nil
 }
 
-func (r *LinkRepository) CreateShortLink(shortLink, originalLink string) error {
+func (r *LinkRepository) CreateShortLink(login, shortLink, originalLink string) error {
 	var exists bool
 	query := `SELECT EXISTS(SELECT 1 FROM urls WHERE short_url=$1 AND original_url=$2)`
 	err := r.db.QueryRow(query, shortLink, originalLink).Scan(&exists)
@@ -64,8 +64,8 @@ func (r *LinkRepository) CreateShortLink(shortLink, originalLink string) error {
 	}
 
 	if !exists {
-		query = `INSERT INTO urls (short_url, original_url) VALUES ($1, $2)`
-		_, err := r.db.Exec(query, shortLink, originalLink)
+		query = `INSERT INTO urls (login, short_url, original_url) VALUES ($1, $2, $3)`
+		_, err := r.db.Exec(query, login, shortLink, originalLink)
 		if err != nil {
 			return err
 		}
@@ -83,4 +83,18 @@ func (r *LinkRepository) CheckLinkExistByOriginal(originalLink string) (bool, er
 	}
 
 	return exists, nil
+}
+
+func (r *LinkRepository) GetLoginFromLog(session_id string) (string, error) {
+	var login string
+	query := `SELECT login FROM users_log WHERE session_id = $1`
+	err := r.db.QueryRow(query, session_id).Scan(&login)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", err
+		}
+		return "", err
+	}
+	return login, nil
 }

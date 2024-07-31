@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS urls (
     id SERIAL PRIMARY KEY,
+    login TEXT NOT NULL,
     short_url VARCHAR(50) UNIQUE NOT NULL,
     original_url TEXT NOT NULL
 );
