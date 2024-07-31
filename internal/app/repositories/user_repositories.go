@@ -1,6 +1,8 @@
 package repositories
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 type IUserRepository interface {
 	CheckUserExistsByLogin(login string) (bool, error)
@@ -76,6 +78,28 @@ func (r *UserRepository) CheckUserExists(user User) (bool, error) {
 
 	if err != nil {
 		return exists, err
+	}
+
+	return exists, nil
+}
+
+func (r *UserRepository) CreateUserLogging(login, session_id string) error {
+	query := `INSERT INTO users_log ( login, session_id) VALUES ($1, $2)`
+	_, err := r.db.Exec(query, login, session_id)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *UserRepository) FindUserLog(login, session_id string) (bool, error) {
+	var exists bool
+	query := `SELECT EXISTS(SELECT 1 FROM users_log WHERE login=$1 AND session_id=$2)`
+	var err = r.db.QueryRow(query, login, session_id).Scan(&exists)
+
+	if err != nil {
+		return false, err
 	}
 
 	return exists, nil

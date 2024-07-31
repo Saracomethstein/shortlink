@@ -9,3 +9,9 @@ CREATE TABLE IF NOT EXISTS users (
     login TEXT NOT NULL,
     password TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS users_log (
+    id SERIAL PRIMARY KEY,
+    login TEXT NOT NULL,
+    session_id TEXT NOT NULL
+);
