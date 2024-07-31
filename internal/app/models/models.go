@@ -14,6 +14,11 @@ type RegisterRequest struct {
 	Password string `json:"password"`
 }
 
+type Link struct {
+	ShortLink    string `json:"shortenedUrl"`
+	OriginalLink string `json:"url"`
+}
+
 type CreateShortLinkRequest struct {
 	OriginalURL string `json:"url"`
 }

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const domainChartElement = document.getElementById('domainChart').getContext('2d');
 
     try {
-        const profileResponse = await fetch('http://localhost:8000/api/profile', {
+        const profileResponse = await fetch('http://localhost:8000/profile', {
             method: 'GET',
             credentials: 'include'
         });

@@ -22,11 +22,13 @@ func main() {
 
 	authHandler := handlers.NewAuthHandler(serviceContainer.AuthService)
 	linkHandler := handlers.NewLinkHandler(serviceContainer.LinkService)
+	profileHandler := handlers.NewProfileHandler(serviceContainer.ProfileService)
 
 	e.POST("/auth", authHandler.Authorization)
 	e.POST("/registration", authHandler.Register)
 	e.POST("/shorten", services.CheckAuthorization(linkHandler.CreateShortLink))
 	e.GET("/redirect/:shortCode", linkHandler.Redirect)
+	e.GET("/profile", profileHandler.CreateHistory)
 
 	e.Logger.Fatal(e.Start(":8000"))
 }
