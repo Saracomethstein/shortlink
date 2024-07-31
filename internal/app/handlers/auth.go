@@ -22,7 +22,9 @@ func NewAuthHandler(authService *services.AuthService) *AuthHandler {
 
 func (h *AuthHandler) Authorization(c echo.Context) error {
 	var req models.LoginRequest
-	if err := c.Bind(&req); err != nil {
+	var err error
+
+	if req, err = models.BindLogin(c); err != nil {
 		return SendErrorResponse(c, http.StatusBadRequest, "Invalid request")
 	}
 

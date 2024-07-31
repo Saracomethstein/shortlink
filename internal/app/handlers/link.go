@@ -22,7 +22,9 @@ func NewLinkHandler(linkService *services.LinkService) *LinkHandler {
 
 func (h *LinkHandler) CreateShortLink(c echo.Context) error {
 	var req models.CreateShortLinkRequest
-	if err := c.Bind(&req); err != nil {
+	var err error
+
+	if req, err = models.BindLink(c); err != nil {
 		return SendErrorResponse(c, http.StatusBadRequest, "Invalid request")
 	}
 
