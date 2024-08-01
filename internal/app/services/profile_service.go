@@ -39,3 +39,14 @@ func (p *ProfileService) GetSessionID(c echo.Context) (string, error) {
 	session_id := cookie.Value
 	return session_id, nil
 }
+
+func (p *ProfileService) GetUsername(session_id string) (string, error) {
+	var username string
+	var err error
+
+	username, err = p.profileRepo.GetLoginFromLog(session_id)
+	if err != nil {
+		return "", err
+	}
+	return username, nil
+}

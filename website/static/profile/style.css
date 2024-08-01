@@ -1,87 +1,70 @@
-
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    background-color: #f4f4f9;
     margin: 0;
-}
-
-.container {
-    background-color: #ffffff;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-#urlForm {
-    display: flex;
-    align-items: center;
-}
-
-#urlInput {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-#shortUrl {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: #ffffff;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-.auth-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.auth-button:hover {
-    background-color: #0056b3;
 }
 
 .container {
     max-width: 800px;
     margin: 0 auto;
+    background-color: #fff;
     padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 h1, h2 {
     color: #333;
+    text-align: center;
 }
 
-#urlHistory {
-    list-style-type: none;
-    padding: 0;
+#username {
+    margin-bottom: 20px;
+    font-size: 1.5em;
 }
 
-#urlHistory li {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table thead {
+    background-color: #007bff;
+    color: #fff;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+table td {
+    word-break: break-word;
+}
+
+table th, table td {
+    text-align: center;
+}
+
+table th:first-child, table td:first-child {
+    border-left: none;
+}
+
+table th:last-child, table td:last-child {
+    border-right: none;
 }

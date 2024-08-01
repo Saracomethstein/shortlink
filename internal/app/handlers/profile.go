@@ -15,9 +15,10 @@ func NewProfileHandler(profileService *services.ProfileService) *ProfileHandler 
 	return &ProfileHandler{ProfileService: profileService}
 }
 
-func (h *ProfileHandler) CreateHistory(c echo.Context) error {
+func (h *ProfileHandler) GetProfileData(c echo.Context) error {
 	var urlHistory []models.Link
 	var session_id string
+	var login string
 	var err error
 
 	if session_id, err = h.ProfileService.GetSessionID(c); err != nil {
@@ -29,5 +30,14 @@ func (h *ProfileHandler) CreateHistory(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, urlHistory)
+	if login, err = h.ProfileService.GetUsername(session_id); err != nil {
+		return err
+	}
+
+	response := map[string]interface{}{
+		"username":   login,
+		"urlHistory": urlHistory,
+	}
+
+	return c.JSON(http.StatusOK, response)
 }
