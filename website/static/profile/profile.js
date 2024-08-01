@@ -55,3 +55,27 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error('Error fetching profile data:', error));
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sessionId = getCookie('session_id');
+    const authButton = document.querySelector('.auth-button');
+    const profileButton = document.querySelector('.profile-button')
+
+    if (sessionId) {
+        authButton.textContent = 'Logout';
+        authButton.onclick = function() {
+            document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+            window.location.href = '/';
+        };
+
+        profileButton.onclick = function () {
+            window.location.href='http://localhost:8000/shorten';
+        };
+    }
+});
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
