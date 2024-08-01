@@ -1,6 +1,6 @@
 BINARY_NAME=build/main
 
-.PHONY: all build run clean
+.PHONY: all build run clean docker-build docker-run docker-clean
 
 all: run
 
@@ -22,3 +22,19 @@ clean:
 	go clean
 	rm -f $(BINARY_NAME)
 	rm -rf build
+
+init-db:
+	@echo "==> Initializing database..."
+	docker compose exec db psql -U user -d shortlink -f /scripts/create_table.sql
+
+docker-build:
+	@echo "==> Building Docker containers..."
+	docker compose build
+
+docker-up: docker-build
+	@echo "==> Starting Docker containers..."
+	docker compose up -d
+
+docker-down:
+	@echo "==> Stopping Docker containers..."
+	docker compose down
