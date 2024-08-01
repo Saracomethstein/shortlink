@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sessionId = getCookie('session_id');
     const authButton = document.querySelector('.auth-button');
     const profileButton = document.querySelector('.profile-button')
+    const submitButton = document.querySelector('.submit-button')
 
     if (sessionId) {
         authButton.textContent = 'Logout';
@@ -13,6 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
         profileButton.onclick = function () {
             window.location.href='http://localhost:8000/profile/';
         };
+
+        submitButton.onclick = function () {
+            window.location.href='http://localhost:8000/output'
+        };
     } else {
         authButton.textContent = 'Login';
         authButton.onclick = function() {
@@ -21,6 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         profileButton.onclick = function () {
             window.location.href = 'http://localhost:8000/';
+        };
+
+        submitButton.onclick = function () {
+            window.location.href='http://localhost:8000/'
         };
     }
 });
@@ -33,8 +42,13 @@ function getCookie(name) {
 
 document.getElementById('urlForm').addEventListener('submit', async function(event) {
     event.preventDefault();
-
+    const sessionId = getCookie('session_id');
     const url = document.getElementById('urlInput').value;
+
+    if (!sessionId) {
+        alert('Please authorization.')
+        return
+    }
 
     if (!url) {
         alert('Please enter a URL.');

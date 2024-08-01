@@ -120,7 +120,7 @@ func CheckAuthorization(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("session_id")
 		if err != nil || cookie.Value == "" {
-			return c.Redirect(http.StatusTemporaryRedirect, "/")
+			return c.Redirect(http.StatusTemporaryRedirect, "http://localhost:8000/")
 		}
 		return next(c)
 	}

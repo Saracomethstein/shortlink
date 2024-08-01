@@ -26,7 +26,7 @@ func main() {
 
 	e.POST("/auth", authHandler.Authorization)
 	e.POST("/registration", authHandler.Register)
-	e.POST("/shorten", services.CheckAuthorization(linkHandler.CreateShortLink))
+	e.POST("/shorten", linkHandler.CreateShortLink)
 	e.GET("/redirect/:shortCode", linkHandler.Redirect)
 	e.GET("/profile", profileHandler.GetProfileData)
 

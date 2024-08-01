@@ -16,27 +16,6 @@ body {
     text-align: center;
 }
 
-#urlForm {
-    display: flex;
-    align-items: center;
-}
-
-#urlInput {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-#shortUrl {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
 button {
     padding: 10px 20px;
     border: none;
