@@ -11,8 +11,7 @@ RUN make build
 
 FROM ubuntu:latest
 
-COPY --from=builder /app/build/main /main
+COPY --from=builder . .
 
-EXPOSE 8000
-
-CMD ["/main"]
+#CMD sleep infinity
+CMD ["/app/build/main"]
