@@ -33,7 +33,7 @@ docker-build:
 
 docker-up: docker-build
 	@echo "==> Starting Docker containers..."
-	docker compose up -d
+	docker compose up
 
 docker-down:
 	@echo "==> Stopping Docker containers..."
