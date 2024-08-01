@@ -8,6 +8,10 @@ import (
 	"shortlink/internal/app/services"
 )
 
+type IProfileHandler interface {
+	GetProfileData(c echo.Context) error
+}
+
 type ProfileHandler struct {
 	ProfileService *services.ProfileService
 }

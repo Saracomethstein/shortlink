@@ -6,6 +6,8 @@ import (
 )
 
 type IProfileRepository interface {
+	GetUserHistory(login string) ([]models.Link, error)
+	GetLoginFromLog(session_id string) (string, error)
 }
 
 type ProfileRepository struct {

@@ -9,6 +9,8 @@ type IUserRepository interface {
 	CheckUserExists(user User) (bool, error)
 	FindUserByLogin(login string) (*User, error)
 	CreateUser(user *User) error
+	CreateUserLogging(login, session_id string) error
+	FindUserLog(login, session_id string) (bool, error)
 }
 
 type User struct {

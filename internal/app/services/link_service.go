@@ -10,6 +10,7 @@ import (
 type ILinkService interface {
 	ShortUrl(c echo.Context) error
 	Redirect(c echo.Context) error
+	GetSessionID(c echo.Context) (string, error)
 }
 
 type LinkService struct {

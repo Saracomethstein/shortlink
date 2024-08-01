@@ -4,6 +4,11 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type IModels interface {
+	BindLogin(c echo.Context) (LoginRequest, error)
+	BindLink(c echo.Context) (CreateShortLinkRequest, error)
+}
+
 type LoginRequest struct {
 	Username string `json:"login"`
 	Password string `json:"password"`

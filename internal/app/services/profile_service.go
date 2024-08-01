@@ -6,6 +6,12 @@ import (
 	"shortlink/internal/app/repositories"
 )
 
+type IProfileService interface {
+	ProfileHistory(sission_id string) ([]models.Link, error)
+	GetSessionID(c echo.Context) (string, error)
+	GetUsername(session_id string) (string, error)
+}
+
 type ProfileService struct {
 	profileRepo repositories.ProfileRepository
 }
