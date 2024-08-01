@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/teris-io/shortid"
 	"net/url"
@@ -75,6 +74,5 @@ func (s *LinkService) GetSessionID(c echo.Context) (string, error) {
 		return "", err
 	}
 	session_id := cookie.Value
-	fmt.Println(session_id)
 	return session_id, nil
 }

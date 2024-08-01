@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"shortlink/internal/app/models"
 	"shortlink/internal/app/repositories"
@@ -38,6 +37,5 @@ func (p *ProfileService) GetSessionID(c echo.Context) (string, error) {
 		return "", err
 	}
 	session_id := cookie.Value
-	fmt.Println(session_id)
 	return session_id, nil
 }

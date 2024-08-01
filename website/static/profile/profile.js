@@ -1,51 +1,29 @@
-document.addEventListener('DOMContentLoaded', async function() {
-    const usernameElement = document.getElementById('username');
-    const urlHistoryElement = document.getElementById('urlHistory');
-    const domainChartElement = document.getElementById('domainChart').getContext('2d');
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/profile', {
+        method: 'GET',
+        credentials: 'include'
+    })
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('urlHistoryTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
 
-    try {
-        const profileResponse = await fetch('http://localhost:8000/profile', {
-            method: 'GET',
-            credentials: 'include'
-        });
+            data.forEach(url => {
+                const row = document.createElement('tr');
 
-        if (!profileResponse.ok) {
-            throw new Error('Failed to fetch profile data');
-        }
+                const shortUrlCell = document.createElement('td');
+                shortUrlCell.textContent = url.shortenedUrl;
+                row.appendChild(shortUrlCell);
 
-        const profileData = await profileResponse.json();
-        usernameElement.textContent = profileData.username;
+                const originalUrlCell = document.createElement('td');
+                originalUrlCell.textContent = url.url;
+                row.appendChild(originalUrlCell);
 
-        profileData.urlHistory.forEach(url => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `Original: ${url.originalUrl} - Shortened: ${url.shortenedUrl}`;
-            urlHistoryElement.appendChild(listItem);
-        });
+                console.log(url.url)
+                console.log(url.shortenedUrl)
 
-        const domainLabels = profileData.topDomains.map(domain => domain.name);
-        const domainData = profileData.topDomains.map(domain => domain.count);
-
-        new Chart(domainChartElement, {
-            type: 'bar',
-            data: {
-                labels: domainLabels,
-                datasets: [{
-                    label: 'Top 10 Most Used Domains',
-                    data: domainData,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    } catch (error) {
-        console.error('Error loading profile data:', error);
-    }
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching URL history:', error));
 });
