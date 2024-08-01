@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         profileButton.onclick = function () {
-            window.location.href='http://localhost:8000/profile';
+            window.location.href='http://localhost:8000/profile/';
         };
     } else {
         authButton.textContent = 'Login';

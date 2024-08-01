@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('/profile', {
+    fetch('http://localhost:8000/profile', {
         method: 'GET',
         credentials: 'include'
     })
