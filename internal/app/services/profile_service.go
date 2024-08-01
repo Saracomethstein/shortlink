@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/labstack/echo/v4"
+	"net/url"
 	"shortlink/internal/app/models"
 	"shortlink/internal/app/repositories"
 )
@@ -10,6 +11,7 @@ type IProfileService interface {
 	ProfileHistory(sission_id string) ([]models.Link, error)
 	GetSessionID(c echo.Context) (string, error)
 	GetUsername(session_id string) (string, error)
+	GetDomainList(urlHistory []models.Link) map[string]int
 }
 
 type ProfileService struct {
@@ -55,4 +57,17 @@ func (p *ProfileService) GetUsername(session_id string) (string, error) {
 		return "", err
 	}
 	return username, nil
+}
+
+func (p *ProfileService) GetDomainList(urlHistory []models.Link) map[string]int {
+	domainCount := make(map[string]int)
+	for _, link := range urlHistory {
+		parsedURL, err := url.Parse(link.OriginalLink)
+		if err != nil {
+			continue
+		}
+		domain := parsedURL.Host
+		domainCount[domain]++
+	}
+	return domainCount
 }

@@ -1,3 +1,16 @@
+-- Tables for database shortlink.
+
+-- Config for connecting:
+-- const (
+-- 	host     = "localhost"
+-- 	port     = 5432
+-- 	user     = "postgres"
+-- 	password = "root"
+-- 	dbname   = "shortlink"
+-- )
+
+-- You can edit config in internal/app/repositories/repositories.go
+
 CREATE TABLE IF NOT EXISTS urls (
     id SERIAL PRIMARY KEY,
     login TEXT NOT NULL,

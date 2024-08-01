@@ -3,7 +3,6 @@ package handlers
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"net/url"
 	"shortlink/internal/app/models"
 	"shortlink/internal/app/services"
 )
@@ -21,6 +20,7 @@ func NewProfileHandler(profileService *services.ProfileService) *ProfileHandler 
 }
 
 func (h *ProfileHandler) GetProfileData(c echo.Context) error {
+	domainCount := make(map[string]int)
 	var urlHistory []models.Link
 	var session_id string
 	var login string
@@ -30,8 +30,7 @@ func (h *ProfileHandler) GetProfileData(c echo.Context) error {
 		return err
 	}
 
-	urlHistory, err = h.ProfileService.ProfileHistory(session_id)
-	if err != nil {
+	if urlHistory, err = h.ProfileService.ProfileHistory(session_id); err != nil {
 		return err
 	}
 
@@ -39,15 +38,7 @@ func (h *ProfileHandler) GetProfileData(c echo.Context) error {
 		return err
 	}
 
-	domainCount := make(map[string]int)
-	for _, link := range urlHistory {
-		parsedURL, err := url.Parse(link.OriginalLink)
-		if err != nil {
-			continue
-		}
-		domain := parsedURL.Host
-		domainCount[domain]++
-	}
+	domainCount = h.ProfileService.GetDomainList(urlHistory)
 
 	response := map[string]interface{}{
 		"username":   login,
