@@ -25,7 +25,7 @@ document.getElementById('authForm').addEventListener('submit', async function(ev
         const data = await response.json();
         if (data.success) {
             document.cookie = `session_id=${data.session_id}; path=/`;
-            window.location.href = '/shorten';
+            window.location.href = '/shorten/';
         } else {
             alert('Authentication failed.');
         }

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('/profile', {
+    fetch('/api/profile', {
         method: 'GET',
         credentials: 'include'
     })
@@ -65,11 +65,11 @@ document.addEventListener('DOMContentLoaded', function() {
         authButton.textContent = 'Logout';
         authButton.onclick = function() {
             document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-            window.location.href = '/';
+            window.location.href = '/auth/';
         };
 
         profileButton.onclick = function () {
-            window.location.href='/shorten';
+            window.location.href='/shorten/';
         };
     }
 });

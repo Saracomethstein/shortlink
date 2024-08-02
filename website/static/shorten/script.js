@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         authButton.textContent = 'Logout';
         authButton.onclick = function() {
             document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-            window.location.href = '/';
+            window.location.href = '/auth/';
         };
 
         profileButton.onclick = function () {
@@ -16,20 +16,20 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         submitButton.onclick = function () {
-            window.location.href='/output'
+            window.location.href='/output/'
         };
     } else {
         authButton.textContent = 'Login';
         authButton.onclick = function() {
-            window.location.href = '/auth';
+            window.location.href = '/auth/';
         };
 
         profileButton.onclick = function () {
-            window.location.href = '/auth';
+            window.location.href = '/auth/';
         };
 
         submitButton.onclick = function () {
-            window.location.href='/auth'
+            window.location.href='/auth/'
         };
     }
 });
@@ -56,7 +56,7 @@ document.getElementById('urlForm').addEventListener('submit', async function(eve
     }
 
     try {
-        const response = await fetch('/shorten', {
+        const response = await fetch('/api/shorten', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -70,7 +70,8 @@ document.getElementById('urlForm').addEventListener('submit', async function(eve
 
         const data = await response.json();
         document.cookie = `shortenedUrl=${encodeURIComponent(data.shortenedUrl)}; path=/`;
-        window.location.href = 's/output';
+        console.log(data.shortenedUrl)
+        window.location.href = '/output/';
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         alert('There was an error shortening the URL.');
