@@ -10,7 +10,7 @@ document.getElementById('authForm').addEventListener('submit', async function(ev
     }
 
     try {
-        const response = await fetch('http://localhost:8000/auth', {
+        const response = await fetch('http://localhost/auth', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ document.getElementById('authForm').addEventListener('submit', async function(ev
         const data = await response.json();
         if (data.success) {
             document.cookie = `session_id=${data.session_id}; path=/`;
-            window.location.href = 'http://localhost:8000/shorten';
+            window.location.href = 'http://localhost/shorten';
         } else {
             alert('Authentication failed.');
         }

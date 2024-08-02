@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('http://localhost:8000/profile', {
+    fetch('http://localhost/profile', {
         method: 'GET',
         credentials: 'include'
     })
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         profileButton.onclick = function () {
-            window.location.href='http://localhost:8000/shorten';
+            window.location.href='http://localhost/shorten';
         };
     }
 });

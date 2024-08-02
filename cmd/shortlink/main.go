@@ -14,12 +14,6 @@ func main() {
 
 	e := echo.New()
 
-	e.Static("/", "./website/static/auth")
-	e.Static("/registration", "./website/static/regist")
-	e.Static("/output", "./website/static/output")
-	e.Static("/shorten", "./website/static/main")
-	e.Static("/profile", "./website/static/profile")
-
 	authHandler := handlers.NewAuthHandler(serviceContainer.AuthService)
 	linkHandler := handlers.NewLinkHandler(serviceContainer.LinkService)
 	profileHandler := handlers.NewProfileHandler(serviceContainer.ProfileService)

@@ -5,7 +5,7 @@ document.getElementById('registrForm').addEventListener('submit', async function
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('http://localhost:8000/registration', {
+        const response = await fetch('http://localhost/registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -17,7 +17,7 @@ document.getElementById('registrForm').addEventListener('submit', async function
 
         if (response.ok) {
             document.getElementById('message').textContent = 'Registration successful!';
-            window.location.href = 'http://localhost:8000/';
+            window.location.href = 'http://localhost/';
         } else {
             document.getElementById('message').textContent = 'Registration failed: ' + data.error;
         }

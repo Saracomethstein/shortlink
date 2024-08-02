@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"shortlink/internal/app/models"
@@ -27,6 +28,8 @@ func (h *AuthHandler) Authorization(c echo.Context) error {
 	if req, err = models.BindLogin(c); err != nil {
 		return SendErrorResponse(c, http.StatusBadRequest, "Invalid request")
 	}
+
+	fmt.Println(req.Username, req.Password)
 
 	token, err := h.AuthService.Authorization(req.Username, req.Password)
 	if err != nil || token == "" {

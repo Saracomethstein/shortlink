@@ -17,7 +17,6 @@ services:
 
   app:
     restart: unless-stopped
-    stop_grace_period: 0.5s
     build:
       context: .
       dockerfile: Dockerfile
@@ -30,8 +29,18 @@ services:
       DB_NAME: shortlink
     depends_on:
       - db
+    expose:
+      - "8000"
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    container_name: shortlink-nginx
     ports:
-      - "8000:8000"
+      - "80:80"
+    depends_on:
+      - app
 
 volumes:
   pgdata:
