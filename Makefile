@@ -25,7 +25,7 @@ clean:
 
 init-db:
 	@echo "==> Initializing database..."
-	docker compose exec db psql -U user -d shortlink -f /scripts/create_table.sql
+	docker compose exec db psql -U postgres -d shortlink -f /docker-entrypoint-initdb.d/create_table.sql
 
 docker-build:
 	@echo "==> Building Docker containers..."

@@ -29,14 +29,15 @@ services:
       DB_NAME: shortlink
     depends_on:
       - db
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
 
   nginx:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx
+    image: nginx:latest
     container_name: shortlink-nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./website/static:/usr/share/nginx/html
     ports:
       - "80:80"
     depends_on:

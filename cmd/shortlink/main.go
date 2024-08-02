@@ -20,9 +20,9 @@ func main() {
 
 	e.POST("/auth", authHandler.Authorization)
 	e.POST("/registration", authHandler.Register)
-	e.POST("/shorten", linkHandler.CreateShortLink)
-	e.GET("/redirect/:shortCode", linkHandler.Redirect)
-	e.GET("/profile", profileHandler.GetProfileData)
+	e.POST("/api/shorten", linkHandler.CreateShortLink)
+	e.GET("/api/redirect/:shortCode", linkHandler.Redirect)
+	e.GET("/api/profile", profileHandler.GetProfileData)
 
 	e.Logger.Fatal(e.Start(":8000"))
 }
