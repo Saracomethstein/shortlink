@@ -70,10 +70,9 @@ document.getElementById('urlForm').addEventListener('submit', async function(eve
 
         const data = await response.json();
         document.cookie = `shortenedUrl=${encodeURIComponent(data.shortenedUrl)}; path=/`;
-        console.log(data.shortenedUrl)
         window.location.href = '/output/';
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
-        alert('There was an error shortening the URL.');
+        alert('There was an error shortening the UR L.');
     }
 });

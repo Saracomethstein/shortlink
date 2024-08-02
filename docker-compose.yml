@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    restart: unless-stopped
+#    restart: unless-stopped
     image: postgres:13
     container_name: shortlink-db
     environment:
@@ -16,7 +16,7 @@ services:
       - "5432:5432"
 
   app:
-    restart: unless-stopped
+#    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile
