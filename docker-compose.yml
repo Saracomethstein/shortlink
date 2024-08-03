@@ -33,7 +33,7 @@ services:
       - "8000:8000"
 
   nginx:
-    image: nginx:latest
+    image: nginx
     container_name: shortlink-nginx
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
