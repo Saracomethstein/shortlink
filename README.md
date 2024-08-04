@@ -10,7 +10,7 @@ Shortlink is a web application for creating and managing short URLs. It is built
 - Redirects to original URLs
 
 ## Project Structure
-
+<!-- 
 ```
 ├── cmd/
 │   └── shortlink/
@@ -42,10 +42,10 @@ Shortlink is a web application for creating and managing short URLs. It is built
 ├── README.md
 ├── go.mod
 └── go.sum
-```
+``` -->
 
 ## Setup and Installation
-
+<!-- 
 1. Clone the repository:
     ```sh
     git clone https://github.com/Saracomethstein/shortlink.git
@@ -62,7 +62,7 @@ Shortlink is a web application for creating and managing short URLs. It is built
 3. Run the application:
     ```sh
     make run
-    ```
+    ``` -->
 
 ## Usage
 
