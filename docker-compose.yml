@@ -12,6 +12,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./scripts:/docker-entrypoint-initdb.d
+    networks:
+      - backend
     ports:
       - "5432:5432"
     deploy:
@@ -33,6 +35,8 @@ services:
       DB_NAME: shortlink
     depends_on:
       - db
+    networks:
+      - backend
     ports:
       - "8000:8000"
     deploy:
@@ -46,6 +50,9 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./website/static:/usr/share/nginx/html
+    networks:
+      - backend
+      - frontend
     ports:
       - "80:80"
     depends_on:
@@ -57,3 +64,7 @@ services:
 
 volumes:
   pgdata:
+
+networks:
+  frontend:
+  backend:
