@@ -27,7 +27,7 @@ func (h *AuthHandler) Authorization(c echo.Context) error {
 	if req, err = models.BindLogin(c); err != nil {
 		return SendErrorResponse(c, http.StatusBadRequest, "Invalid request")
 	}
-	
+
 	token, err := h.AuthService.Authorization(req.Username, req.Password)
 	if err != nil || token == "" {
 		return SendErrorResponse(c, http.StatusUnauthorized, "Invalid credentials")
