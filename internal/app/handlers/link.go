@@ -37,7 +37,7 @@ func (h *LinkHandler) CreateShortLink(c echo.Context) error {
 		return SendErrorResponse(c, http.StatusInternalServerError, "Could not create short link")
 	}
 
-	response := models.CreateShortLinkResponse{ShortCode: "http://localhost/api/redirect/" + shortCode}
+	response := models.CreateShortLinkResponse{ShortCode: "http://localhost/api/" + shortCode}
 	return c.JSON(http.StatusOK, response)
 }
 

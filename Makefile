@@ -38,3 +38,9 @@ docker-up: docker-build
 docker-down:
 	@echo "==> Stopping Docker containers..."
 	docker compose down
+
+docker-pull:
+	docker pull ubuntu:latest
+	docker pull golang:1.21.1
+	docker pull nginx
+	docker pull postgres:13
