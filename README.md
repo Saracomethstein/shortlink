@@ -80,7 +80,7 @@ Shortlink is a web application for creating and managing short URLs. It is built
     make docker-up
     ``` 
    
-3. Open in browser
+3. Open in browser:
     ```sh
     http://localhost/auth/
     ```
