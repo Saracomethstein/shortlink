@@ -1,10 +1,47 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const sessionId = getCookie('session_id');
+    const authButton = document.querySelector('.auth-button');
+    const profileButton = document.querySelector('.profile-button');
+    const submitButton = document.querySelector('.submit-button');
+
+    if (!authButton || !profileButton || !submitButton) {
+        console.error('One or more elements not found');
+        return;
+    }
+
+    if (sessionId) {
+        authButton.textContent = 'Logout';
+        authButton.onclick = function() {
+            document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+            window.location.href = '/auth/';
+        };
+
+        profileButton.onclick = function () {
+            window.location.href = '/profile/';
+        };
+    } else {
+        authButton.textContent = 'Login';
+        authButton.onclick = function() {
+            window.location.href = '/auth/';
+        };
+
+        profileButton.onclick = function () {
+            window.location.href = '/auth/';
+        };
+
+        submitButton.onclick = function () {
+            window.location.href = '/auth/';
+        };
+    }
+});
+
 document.getElementById('urlForm').addEventListener('submit', async function(event) {
     event.preventDefault();
     const sessionId = getCookie('session_id');
     const url = document.getElementById('urlInput').value;
 
     if (!sessionId) {
-        alert('Please authorization.')
+        alert('Please authorization.');
         return;
     }
 
@@ -28,48 +65,10 @@ document.getElementById('urlForm').addEventListener('submit', async function(eve
 
         const data = await response.json();
         document.cookie = `shortenedUrl=${encodeURIComponent(data.shortenedUrl)}; path=/; domain=${window.location.hostname}`;
-        console.log('Cookies set:', document.cookie);
-
         window.location.href = '/output/';
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         alert('There was an error shortening the URL.');
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const sessionId = getCookie('session_id');
-    const authButton = document.querySelector('.auth-button');
-    const profileButton = document.querySelector('.profile-button')
-    const submitButton = document.querySelector('.submit-button')
-
-    if (sessionId) {
-        authButton.textContent = 'Logout';
-        authButton.onclick = function() {
-            document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-            window.location.href = '/auth/';
-        };
-
-        profileButton.onclick = function () {
-            window.location.href='/profile/';
-        };
-
-        submitButton.onclick = function () {
-            window.location.href='/output/'
-        };
-    } else {
-        authButton.textContent = 'Login';
-        authButton.onclick = function() {
-            window.location.href = '/auth/';
-        };
-
-        profileButton.onclick = function () {
-            window.location.href = '/auth/';
-        };
-
-        submitButton.onclick = function () {
-            window.location.href='/auth/'
-        };
     }
 });
 
