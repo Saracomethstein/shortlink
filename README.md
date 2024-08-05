@@ -75,12 +75,17 @@ Shortlink is a web application for creating and managing short URLs. It is built
     cd shortlink
     ```
 
-2. Build and run the application:
+2. Pull docker images:
+    ```sh
+    make docker-pull
+    ``` 
+
+3. Build and run the application:
     ```sh
     make docker-up
     ``` 
    
-3. Open in browser:
+4. Open in browser:
     ```sh
     http://localhost/auth/
     ```
