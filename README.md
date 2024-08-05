@@ -9,8 +9,11 @@ Shortlink is a web application for creating and managing short URLs. It is built
 - URL shortening
 - Redirects to original URLs
 
-## Project Structure
-<!-- 
+## Requirements
+ - Docker
+ - Web browser
+
+## Project Structure 
 ```
 ├── cmd/
 │   └── shortlink/
@@ -20,49 +23,62 @@ Shortlink is a web application for creating and managing short URLs. It is built
 │   │   ├── handlers/
 │   │   │   ├── auth.go
 │   │   │   ├── link.go
+│   │   │   ├── profile.go
 │   │   │   └── handlers.go
 │   │   ├── repositories/
 │   │   │   ├── user_repository.go
 │   │   │   ├── link_repository.go
+│   │   │   ├── profile_repository.go
 │   │   │   └── repositories.go
 │   │   ├── services/
 │   │   │   ├── auth_service.go
 │   │   │   ├── link_service.go
+│   │   │   ├── profile_service.go
 │   │   │   └── services.go
-│   │   ├── config/
-│   │   │   └── config.go
 │   │   └── models/
-│   │       ├── user.go
-│   │       ├── link.go
 │   │       └── models.go
+├── scripts/
+│   └── create_table.sql
 ├── website/
-│   ├── static/
-│   └── templates/
+│   └── static/
+│       ├── auth/
+│       │   ├── index.html
+│       │   └── auth.js
+│       ├── registration/
+│       │   ├── index.html
+│       │   └── regist.js
+│       ├── profile/
+│       │   ├── index.html
+│       │   └── profile.js
+│       ├── shorten/
+│       │   ├── index.html
+│       │   └── shorten.js
+│       ├── output/
+│       │   ├── index.html
+│       │   └── output.js
+│       └── styles/
+│           └── styles.css
 ├── Makefile
+├── Dockerfile
+├── docker-compose.yml
+├── Dockerfile.nginx
+├── nginx.conf
 ├── README.md
 ├── go.mod
 └── go.sum
-``` -->
+```
 
 ## Setup and Installation
-<!-- 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/Saracomethstein/shortlink.git
+    git clone git@github.com:Saracomethstein/shortlink.git
     cd shortlink
     ```
 
-2. Install dependencies:
+2. Build and run the application:
     ```sh
-    go mod download
-    ```
-
-   Modify `.env` to match your database and other configuration settings.
-
-3. Run the application:
-    ```sh
-    make run
-    ``` -->
+    make docker-up
+    ``` 
 
 ## Usage
 
